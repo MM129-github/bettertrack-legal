@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BetterTrack — Free track calculator for runners and coaches</title>
+  <meta name="description" content="BetterTrack is a free iPhone and iPad app for runners and coaches. Calculate pace and splits, time workouts, and save notes offline. No account and no ads.">
+  <meta name="author" content="Miguel Macias">
+  <meta name="application-name" content="BetterTrack">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#f3efe4">
+  <meta name="color-scheme" content="light">
+  <meta name="apple-itunes-app" content="app-id=6798806026">
+  <link rel="canonical" href="https://bettertrackapp.com/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23f3efe4'/%3E%3Crect x='4' y='4' width='24' height='24' rx='12' fill='none' stroke='%23c44732' stroke-width='3'/%3E%3Crect x='9' y='9' width='14' height='14' rx='7' fill='none' stroke='%231b1e18' stroke-width='2'/%3E%3C/svg%3E">
+
+  <meta property="og:title" content="BetterTrack — Free track calculator for runners and coaches">
+  <meta property="og:description" content="Pace, splits, lane staggers, stopwatches, and workouts for iPhone and iPad. Free, offline, and stored only on your device.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bettertrackapp.com/">
+  <meta property="og:site_name" content="BetterTrack">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="BetterTrack — Free track calculator for runners and coaches">
+  <meta name="twitter:description" content="Pace, splits, lane staggers, stopwatches, and workouts for iPhone and iPad. Free, offline, and stored only on your device.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "BetterTrack",
+    "operatingSystem": "iOS",
+    "applicationCategory": "UtilitiesApplication",
+    "url": "https://bettertrackapp.com/",
+    "downloadUrl": "https://apps.apple.com/us/app/bettertrack/id6798806026",
+    "description": "A free iOS app for runners and coaches. Pace, splits, lane staggers, stopwatches, workouts, and notes — fully offline, with no account and no ads.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Miguel Macias"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --paper: #f3efe4;
+      --card: #faf7f0;
+      --ink: #1b1e18;
+      --muted: #3f463f;
+      --line: #d9d2c3;
+      --clay: #c44732;
+      --clay-ink: #8d2e1c;
+      --infield: #17382d;
+      --chalk: #f6f1e6;
+      --serif: "Fraunces", "Liberation Serif", Georgia, serif;
+      --sans: "Outfit", Inter, "Liberation Sans", sans-serif;
+      --wrap: 1080px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 1.0625rem;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection {
+      background: #f0c2b6;
+      color: var(--ink);
+    }
+
+    img, svg { display: block; max-width: 100%; }
+
+    a { color: inherit; }
+
+    a:focus-visible,
+    .store:focus-visible {
+      outline: 3px solid var(--clay);
+      outline-offset: 3px;
+    }
+
+    .skip {
+      position: absolute;
+      left: 12px;
+      top: -48px;
+      background: var(--ink);
+      color: var(--chalk);
+      padding: 8px 12px;
+      z-index: 5;
+      text-decoration: none;
+    }
+
+    .skip:focus { top: 12px; }
+
+    .wrap {
+      width: min(var(--wrap), calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--clay-ink);
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px 28px;
+      min-height: 72px;
+      flex-wrap: wrap;
+      padding: 14px 0;
+    }
+
+    .brand {
+      font-family: var(--serif);
+      font-size: 1.45rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      text-decoration: none;
+      line-height: 1;
+    }
+
+    .brand:hover { color: var(--clay-ink); }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 22px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      font-size: 0.98rem;
+      font-weight: 500;
+      padding: 10px 0;
+    }
+
+    .nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+    .hero {
+      padding: 56px 0 48px;
+    }
+
+    .hero-grid {
+      display: grid;
+      gap: 36px;
+      align-items: end;
+    }
+
+    h1, h2, h3 { font-weight: 500; letter-spacing: -0.03em; }
+
+    h1 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(2.7rem, 6vw, 4.7rem);
+      line-height: 0.98;
+      max-width: 11em;
+      text-wrap: balance;
+    }
+
+    .lede {
+      margin: 22px 0 0;
+      max-width: 38rem;
+      font-size: 1.15rem;
+      color: var(--muted);
+      text-wrap: pretty;
+    }
+
+    .store {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 28px;
+      min-height: 54px;
+      padding: 8px 18px 8px 14px;
+      background: #111;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 10px;
+    }
+
+    .store:hover { background: #2a2a2a; }
+
+    .store:active { transform: translateY(1px); }
+
+    .store svg { width: 18px; height: 22px; flex: none; }
+
+    .store-small {
+      display: block;
+      font-size: 0.72rem;
+      line-height: 1.15;
+      font-weight: 400;
+    }
+
+    .store-big {
+      display: block;
+      font-size: 1.28rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+
+    .poster {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+
+    .poster li {
+      padding: 20px 18px 22px;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+    }
+
+    .poster li:nth-child(2n) { border-right: 0; }
+
+    .poster li:nth-last-child(-n+2) { border-bottom: 0; }
+
+    .poster .k {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--clay-ink);
+    }
+
+    .poster strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: clamp(1.35rem, 2vw, 1.7rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+
+    .track {
+      height: 78px;
+      background-color: #c44732;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(246, 241, 230, 0.95) 0 2px,
+        transparent 2px 16px
+      );
+      position: relative;
+    }
+
+    .track-finish {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 11%;
+      width: 16px;
+      background-color: #f6f1e6;
+      background-image:
+        linear-gradient(45deg, #1b1e18 25%, transparent 25%),
+        linear-gradient(-45deg, #1b1e18 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #1b1e18 75%),
+        linear-gradient(-45deg, transparent 75%, #1b1e18 75%);
+      background-size: 8px 8px;
+      background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+    }
+
+    .features { padding: 76px 0 28px; }
+
+    .section-head {
+      max-width: 38rem;
+      margin-bottom: 36px;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.1rem);
+      line-height: 1.05;
+      text-wrap: balance;
+    }
+
+    .section-head p {
+      margin: 14px 0 0;
+      color: var(--muted);
+    }
+
+    .grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px 48px;
+    }
+
+    .grid li {
+      border-top: 1px solid var(--ink);
+      padding-top: 16px;
+    }
+
+    .num {
+      margin: 0 0 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--clay-ink);
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-family: var(--serif);
+      font-size: 1.55rem;
+      line-height: 1.15;
+    }
+
+    .grid p:last-child {
+      margin: 0;
+      color: var(--muted);
+      max-width: 42rem;
+    }
+
+    .about {
+      margin-top: 72px;
+      background: var(--infield);
+      color: var(--chalk);
+    }
+
+    .about-inner {
+      display: grid;
+      gap: 22px;
+      padding: 64px 0;
+    }
+
+    .about .eyebrow { color: #f0c7ba; }
+
+    .about h2 {
+      font-style: italic;
+      max-width: 12em;
+    }
+
+    .about p { margin: 0; }
+
+    .about-body {
+      font-size: 1.12rem;
+      max-width: 38rem;
+      text-wrap: pretty;
+    }
+
+    .about .store { background: var(--chalk); color: var(--ink); }
+
+    .about .store:hover { background: #fff; }
+
+    .about .store:focus-visible { outline-color: var(--chalk); }
+
+    .site-footer {
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-inner {
+      display: grid;
+      gap: 18px;
+      padding: 32px 0 40px;
+    }
+
+    .footer-name {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+
+    .footer-tag {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+    }
+
+    .footer-nav a {
+      display: inline-block;
+      font-weight: 500;
+      padding: 10px 0;
+      text-underline-offset: 3px;
+    }
+
+    .mail {
+      font-weight: 600;
+      text-underline-offset: 3px;
+      overflow-wrap: anywhere;
+    }
+
+    .copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (min-width: 800px) {
+      .hero { padding: 84px 0 68px; }
+
+      .hero-grid {
+        grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+        gap: 56px;
+      }
+
+      .poster li { padding: 26px 22px 28px; }
+
+      .track { height: 96px; }
+
+      .features { padding-top: 92px; }
+
+      .grid { grid-template-columns: 1fr 1fr; }
+
+      .about-inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+        align-items: end;
+        padding: 84px 0;
+      }
+
+      .footer-inner {
+        grid-template-columns: 1.4fr auto auto;
+        align-items: center;
+        gap: 28px;
+      }
+
+      .copy { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 420px) {
+      .wrap { width: min(var(--wrap), calc(100% - 32px)); }
+
+      .poster strong { font-size: 1.2rem; }
+
+      .store-big { font-size: 1.15rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .store:active { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html">BetterTrack</a>
+      <nav class="nav" aria-label="Page">
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+        <a href="support.html">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">Free on iPhone and iPad</p>
+          <h1>The track calculator in your pocket.</h1>
+          <p class="lede">BetterTrack is a free iOS app for runners and coaches. Pace, splits, lane staggers, stopwatches, and workouts — figured at practice, then kept on the device.</p>
+          <a class="store" href="https://apps.apple.com/us/app/bettertrack/id6798806026">
+            <svg viewBox="0 0 18 22" aria-hidden="true">
+              <path fill="currentColor" d="M14.7 11.5c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.6.9-.8 0-1.9-.8-3.2-.8-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.1 1.7 2.4 3 2.4 1.2 0 1.6-.8 3.1-.8s1.8.8 3.1.8c1.3 0 2.1-1.2 2.9-2.3.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.5-.9-2.5-3.9zM12.4 4.2c.6-.8 1.1-1.9 1-3-1 .1-2.1.6-2.8 1.4-.6.7-1.2 1.8-1 2.9 1.1.1 2.1-.5 2.8-1.3z"/>
+            </svg>
+            <span>
+              <span class="store-small">Download on the</span>
+              <span class="store-big">App Store</span>
+            </span>
+          </a>
+        </div>
+        <ul class="poster" aria-label="Practical details">
+          <li>
+            <span class="k">01</span>
+            <strong>Works fully offline</strong>
+          </li>
+          <li>
+            <span class="k">02</span>
+            <strong>No account or login</strong>
+          </li>
+          <li>
+            <span class="k">03</span>
+            <strong>No ads</strong>
+          </li>
+          <li>
+            <span class="k">04</span>
+            <strong>Data stays on the device</strong>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="track" aria-hidden="true">
+      <div class="track-finish"></div>
+    </div>
+
+    <section class="features" id="features">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Features</p>
+          <h2>Eight tools for practice</h2>
+          <p>Everything runs on the iPhone or iPad you already take to the track.</p>
+        </div>
+        <ul class="grid">
+          <li>
+            <p class="num">01</p>
+            <h3>Pace &amp; Splits</h3>
+            <p>Calculate pace, splits, and target times from any distance and finish time.</p>
+          </li>
+          <li>
+            <p class="num">02</p>
+            <h3>Splits Averager</h3>
+            <p>Log splits, adjust them with up and down, and get clean averages.</p>
+          </li>
+          <li>
+            <p class="num">03</p>
+            <h3>Full-Lane Staggers</h3>
+            <p>Set custom start positions so each runner stays in lane.</p>
+          </li>
+          <li>
+            <p class="num">04</p>
+            <h3>Multi Stopwatch</h3>
+            <p>Run several stopwatches at once, with laps and a start-all control.</p>
+          </li>
+          <li>
+            <p class="num">05</p>
+            <h3>World Athletics Points Converter</h3>
+            <p>Convert a performance to World Athletics points.</p>
+          </li>
+          <li>
+            <p class="num">06</p>
+            <h3>Progression Table</h3>
+            <p>Build an even progression from a start split to an end split, with rest.</p>
+          </li>
+          <li>
+            <p class="num">07</p>
+            <h3>Workout Builder</h3>
+            <p>Drag and drop blocks, loops, and progressions, then share the workout.</p>
+          </li>
+          <li>
+            <p class="num">08</p>
+            <h3>Notes</h3>
+            <p>Save notes and calculator results on the device.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="wrap about-inner">
+        <div>
+          <p class="eyebrow">North Carolina</p>
+          <h2>Built by a high school runner</h2>
+        </div>
+        <div>
+          <p class="about-body">Miguel Macias is a high school runner in North Carolina. He built BetterTrack for runners and coaches who need the math of a workout at practice, without an account or a connection. Notes and results stay on the device.</p>
+          <a class="store" href="https://apps.apple.com/us/app/bettertrack/id6798806026">
+            <svg viewBox="0 0 18 22" aria-hidden="true">
+              <path fill="currentColor" d="M14.7 11.5c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.6.9-.8 0-1.9-.8-3.2-.8-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.1 1.7 2.4 3 2.4 1.2 0 1.6-.8 3.1-.8s1.8.8 3.1.8c1.3 0 2.1-1.2 2.9-2.3.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.5-.9-2.5-3.9zM12.4 4.2c.6-.8 1.1-1.9 1-3-1 .1-2.1.6-2.8 1.4-.6.7-1.2 1.8-1 2.9 1.1.1 2.1-.5 2.8-1.3z"/>
+            </svg>
+            <span>
+              <span class="store-small">Download on the</span>
+              <span class="store-big">App Store</span>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div>
+        <p class="footer-name">BetterTrack</p>
+        <p class="footer-tag">A free app for runners and coaches.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="privacy.html">Privacy</a>
+        <a href="support.html">Support</a>
+      </nav>
+      <a class="mail" href="mailto:outreach@bettertrackapp.com">outreach@bettertrackapp.com</a>
+      <p class="copy">© 2026 Miguel Macias</p>
+    </div>
+  </footer>
+</body>
+</html>
