@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BetterTrack — Your all-in-one track calculator</title>
-  <meta name="description" content="BetterTrack is a free iPhone and iPad track calculator. Your all-in-one track calculator.">
+  <title>BetterTrack — Free trackside tools for coaches and athletes</title>
+  <meta name="description" content="Calculate pace and splits, time multiple athletes, and compare performances with World Athletics points.">
   <meta name="author" content="Miguel Macias">
   <meta name="robots" content="index,follow">
   <meta name="theme-color" content="#000000">
@@ -13,15 +13,15 @@
   <link rel="icon" href="icon.jpg" type="image/jpeg">
   <link rel="apple-touch-icon" href="icon.jpg">
 
-  <meta property="og:title" content="BetterTrack — Your all-in-one track calculator">
-  <meta property="og:description" content="BetterTrack is a free iPhone and iPad track calculator.">
+  <meta property="og:title" content="BetterTrack — Free trackside tools for coaches and athletes">
+  <meta property="og:description" content="Calculate pace and splits, time multiple athletes, and compare performances with World Athletics points.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://bettertrackapp.com/">
   <meta property="og:site_name" content="BetterTrack">
   <meta property="og:image" content="https://bettertrackapp.com/icon.jpg">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="BetterTrack — Your all-in-one track calculator">
-  <meta name="twitter:description" content="BetterTrack is a free iPhone and iPad track calculator.">
+  <meta name="twitter:title" content="BetterTrack — Free trackside tools for coaches and athletes">
+  <meta name="twitter:description" content="Calculate pace and splits, time multiple athletes, and compare performances with World Athletics points.">
   <meta name="twitter:image" content="https://bettertrackapp.com/icon.jpg">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,142 +33,439 @@
       --bg: #000;
       --text: #fff;
       --muted: #b7b3c2;
+      --line: rgba(255, 255, 255, 0.14);
+      --focus: #ddd6fe;
       --font: "Ubuntu", "Segoe UI", sans-serif;
+      --header: 64px;
     }
 
     * { box-sizing: border-box; }
 
-    html, body { height: 100%; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       background: var(--bg);
       color: var(--text);
       font-family: var(--font);
+      font-size: 1rem;
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
     }
 
-    .page {
-      min-height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    img { max-width: 100%; height: auto; }
+
+    a { color: inherit; }
+
+    .skip {
+      position: absolute;
+      left: 16px;
+      top: 12px;
+      transform: translateY(-160%);
+      z-index: 20;
+      background: #fff;
+      color: #000;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 10px;
     }
 
-    main {
-      flex: 1;
-      width: min(420px, calc(100% - 40px));
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 32px 0 16px;
+    .skip:focus {
+      transform: none;
     }
 
-    .logo {
-      width: min(240px, 68vw);
-      height: auto;
+    :focus { outline: none; }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: var(--header);
+      padding: 10px 20px;
+      background: #000;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      overflow: hidden;
+      flex: 0 0 auto;
+    }
+
+    .brand-mark img {
+      width: 58px;
+      height: 58px;
+      max-width: none;
+      margin: -11px 0 0 -11px;
       display: block;
     }
 
-    h1 {
-      margin: 4px 0 0;
-      font-size: clamp(2.5rem, 10vw, 3.25rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1.05;
+    .site-header nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
-    .subtitle {
-      margin: 10px 0 0;
+    .site-header nav a,
+    .footer a {
       color: var(--muted);
-      font-size: 1.05rem;
-      font-weight: 400;
-      line-height: 1.4;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 10px 12px;
+      border-radius: 10px;
+    }
+
+    .site-header nav a:hover,
+    .footer a:hover {
+      color: #fff;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .hero {
+      position: relative;
+      width: min(760px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 48px 0 28px;
+      text-align: center;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: min(320px, 80vw);
+      height: min(320px, 80vw);
+      left: 50%;
+      top: 28px;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, rgba(109, 94, 252, 0.32), transparent 68%);
+      pointer-events: none;
+    }
+
+    .hero > * { position: relative; }
+
+    .logo {
+      width: 148px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .name {
+      margin: 8px 0 0;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+
+    h1 {
+      margin: 14px auto 0;
+      max-width: 14em;
+      font-size: clamp(2.15rem, 5.4vw, 3.45rem);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+      text-wrap: balance;
+    }
+
+    .lede {
+      margin: 16px auto 0;
+      max-width: 38rem;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2.4vw, 1.2rem);
+      line-height: 1.45;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 28px;
     }
 
     .cta {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: min(320px, 100%);
+      gap: 10px;
       min-height: 54px;
-      margin-top: 28px;
+      min-width: min(100%, 280px);
       padding: 12px 22px;
       border-radius: 999px;
-      background: linear-gradient(100deg, #6d5efc 0%, #8b5cf6 55%, #c084fc 100%);
+      background: linear-gradient(100deg, #4f46e5 0%, #6456f5 48%, #6d28d9 100%);
       color: #fff;
       font-family: inherit;
       font-size: 1.02rem;
       font-weight: 700;
       letter-spacing: -0.01em;
+      line-height: 1.2;
+      text-align: center;
       text-decoration: none;
       box-shadow: 0 10px 28px rgba(109, 94, 252, 0.35);
     }
 
-    .cta:hover { filter: brightness(1.08); }
+    .cta svg { flex: 0 0 auto; }
+
+    .cta:hover {
+      box-shadow: 0 12px 32px rgba(109, 94, 252, 0.5);
+    }
 
     .cta-secondary {
-      margin-top: 12px;
       background: transparent;
-      border: 1.5px solid rgba(255, 255, 255, 0.38);
+      border: 1.5px solid rgba(255, 255, 255, 0.72);
       box-shadow: none;
     }
 
     .cta-secondary:hover {
-      filter: none;
       background: rgba(255, 255, 255, 0.08);
+      box-shadow: none;
     }
 
-    .cta:focus-visible,
-    .footer a:focus-visible {
-      outline: 3px solid #ddd6fe;
-      outline-offset: 3px;
+    .tools {
+      width: min(1120px, calc(100% - 40px));
+      margin: 12px auto 0;
+      padding: 36px 0 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-intro {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.6rem, 3vw, 2rem);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+
+    .section-intro p,
+    .closing p {
+      margin: 10px auto 0;
+      max-width: 36rem;
+      color: var(--muted);
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 36px;
+      margin: 0 auto;
+      padding: 0;
+      max-width: 440px;
+      list-style: none;
+    }
+
+    .tool-grid figure { margin: 0; }
+
+    .tool-grid h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .tool-grid figcaption p {
+      margin: 6px 0 14px;
+      color: var(--muted);
+    }
+
+    .tool-grid img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: #12061f;
+      box-shadow: 0 18px 44px rgba(76, 40, 150, 0.22);
+    }
+
+    .closing {
+      width: min(760px, calc(100% - 40px));
+      margin: 8px auto 0;
+      padding: 36px 0 12px;
+      border-top: 1px solid var(--line);
+      text-align: center;
     }
 
     .footer {
-      padding: 8px 20px 28px;
+      padding: 8px 20px 32px;
     }
 
     .footer nav {
       display: flex;
-      gap: 20px;
+      gap: 8px;
       justify-content: center;
     }
 
-    .footer a {
-      color: var(--muted);
-      font-size: 0.92rem;
-      font-weight: 400;
-      text-decoration: none;
-      padding: 10px 4px;
+    @media (max-width: 640px) {
+      .actions { flex-direction: column; align-items: stretch; }
+      .cta { width: 100%; }
     }
 
-    .footer a:hover { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 420px) {
+      .site-header {
+        padding: 8px 12px;
+        gap: 8px;
+      }
 
-    @media (max-width: 360px) {
-      h1 { font-size: 2.25rem; }
-      .subtitle { font-size: 0.98rem; }
-      .cta { font-size: 0.95rem; }
+      .brand { gap: 8px; font-size: 0.98rem; }
+
+      .site-header nav a {
+        padding: 10px 6px;
+      }
+
+      .cta {
+        font-size: 0.98rem;
+        padding: 12px 14px;
+      }
+    }
+
+    @media (min-width: 1040px) {
+      .tool-grid {
+        max-width: none;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 28px;
+        align-items: start;
+      }
+
+      .tool-grid figcaption {
+        min-height: 7.75rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <main>
+  <a class="skip" href="#content">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="/">
+      <span class="brand-mark">
+        <img src="icon.jpg" alt="" width="635" height="635">
+      </span>
+      BetterTrack
+    </a>
+    <nav aria-label="Site">
+      <a href="privacy.html">Privacy</a>
+      <a href="support.html">Support</a>
+    </nav>
+  </header>
+  <main id="content">
+    <section class="hero" aria-labelledby="hero-heading">
       <img class="logo" src="icon.jpg" alt="" width="635" height="635">
-      <h1>BetterTrack</h1>
-      <p class="subtitle">Your all-in-one track calculator</p>
-      <a class="cta" href="https://apps.apple.com/us/app/bettertrack/id6798806026">Download on the App Store</a>
-      <a class="cta cta-secondary" href="/app/">Open online version</a>
-    </main>
-    <footer class="footer">
-      <nav aria-label="Footer">
-        <a href="privacy.html">Privacy</a>
-        <a href="support.html">Support</a>
-      </nav>
-    </footer>
-  </div>
+      <p class="name">BetterTrack</p>
+      <h1 id="hero-heading">Free trackside tools for coaches and athletes.</h1>
+      <p class="lede">Calculate pace and splits, time multiple athletes, and compare performances with World Athletics points.</p>
+      <div class="actions">
+        <a class="cta" href="https://apps.apple.com/us/app/bettertrack/id6798806026">
+          <svg aria-hidden="true" viewBox="0 0 16 16" width="18" height="18">
+            <path fill="currentColor" d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516.024.034 1.52.087 2.475-1.258.955-1.345.762-2.391.728-2.43zm3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422.212-2.189 1.675-2.789 1.698-2.854.023-.065-.597-.79-1.254-1.157a3.692 3.692 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56.244.729.625 1.924 1.273 2.796.576.984 1.34 1.667 1.659 1.899.319.232 1.219.386 1.843.067.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758.347-.79.505-1.217.473-1.282z"/>
+          </svg>
+          Download on the App Store
+        </a>
+        <a class="cta cta-secondary" href="/app/">Try it free in your browser</a>
+      </div>
+    </section>
+
+    <section class="tools" aria-labelledby="tools-heading">
+      <div class="section-intro">
+        <h2 id="tools-heading">Included tools</h2>
+      </div>
+      <ul class="tool-grid">
+        <li>
+          <figure>
+            <figcaption>
+              <h3>Pace &amp; Splits</h3>
+              <p>Calculate pace, splits, and target times.</p>
+            </figcaption>
+            <img
+              src="assets/pace-and-splits.webp"
+              width="860"
+              height="1460"
+              alt="Pace and Splits showing 400 meters in 1:00, cumulative 200 meter splits of 30.00 seconds and 1:00.00, a mile pace of 4:01.40, and a kilometer pace of 2:30.00."
+              loading="lazy"
+              decoding="async">
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <figcaption>
+              <h3>Multi Stopwatch</h3>
+              <p>Run several stopwatches at once with laps and a start-all button.</p>
+            </figcaption>
+            <img
+              src="assets/multi-stopwatch.webp"
+              width="860"
+              height="1720"
+              alt="Multi Stopwatch with three running timers labeled Lane 1, Lane 2, and Lane 3, each at 3.42 seconds, plus Start All, Stop All, and Reset All."
+              loading="lazy"
+              decoding="async">
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <figcaption>
+              <h3>World Athletics Points Converter</h3>
+              <p>Convert any performance to World Athletics points.</p>
+            </figcaption>
+            <img
+              src="assets/world-athletics-points.webp"
+              width="860"
+              height="980"
+              alt="World Athletics Points Converter for men, track, 100 meters. A performance of 10.85 shows 931 points from the 2025 tables."
+              loading="lazy"
+              decoding="async">
+          </figure>
+        </li>
+      </ul>
+    </section>
+
+    <section class="closing" aria-labelledby="open-heading">
+      <h2 id="open-heading">Open BetterTrack</h2>
+      <div class="actions">
+        <a class="cta" href="https://apps.apple.com/us/app/bettertrack/id6798806026">
+          <svg aria-hidden="true" viewBox="0 0 16 16" width="18" height="18">
+            <path fill="currentColor" d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516.024.034 1.52.087 2.475-1.258.955-1.345.762-2.391.728-2.43zm3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422.212-2.189 1.675-2.789 1.698-2.854.023-.065-.597-.79-1.254-1.157a3.692 3.692 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56.244.729.625 1.924 1.273 2.796.576.984 1.34 1.667 1.659 1.899.319.232 1.219.386 1.843.067.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758.347-.79.505-1.217.473-1.282z"/>
+          </svg>
+          Download on the App Store
+        </a>
+        <a class="cta cta-secondary" href="/app/">Try it free in your browser</a>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <nav aria-label="Footer">
+      <a href="privacy.html">Privacy</a>
+      <a href="support.html">Support</a>
+    </nav>
+  </footer>
 </body>
 </html>
