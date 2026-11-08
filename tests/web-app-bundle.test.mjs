@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 const root = new URL("../", import.meta.url);
-const bundleName = "index-80d462ee82f2ff9f2398060601dfe132.js";
+const bundleName = "index-458e103ce7d62330e0759307a432ecc7.js";
 const bundlePath = `app/_expo/static/js/web/${bundleName}`;
 
 function read(path) {
@@ -13,14 +13,14 @@ function read(path) {
 test("web app index serves the verified bundle and keeps install metadata", () => {
   const html = read("app/index.html");
   assert.match(html, new RegExp(`/app/_expo/static/js/web/${bundleName}`));
-  assert.doesNotMatch(html, /index-033182117a6be59f2b44cecc1f908752\.js/);
+  assert.doesNotMatch(html, /index-80d462ee82f2ff9f2398060601dfe132\.js/);
   assert.doesNotMatch(html, /index-f6a07ee52676ae097c3aeb4bfd208aa0\.js/);
   assert.match(html, /href="\/apple-touch-icon\.png"/);
   assert.match(html, /href="\/app\/manifest\.webmanifest"/);
   assert.match(html, /content="BetterTrack"/);
   assert.equal(existsSync(new URL(bundlePath, root)), true);
   assert.equal(
-    existsSync(new URL("app/_expo/static/js/web/index-033182117a6be59f2b44cecc1f908752.js", root)),
+    existsSync(new URL("app/_expo/static/js/web/index-80d462ee82f2ff9f2398060601dfe132.js", root)),
     false,
   );
 });
@@ -51,6 +51,9 @@ test("verified bundle contains the shipped web features and its asset files", ()
     "[1,.5,.25,.1]",
   ];
   for (const phrase of phrases) assert.ok(js.includes(phrase), phrase);
+  assert.equal(js.includes("Test preview"), false);
+  assert.equal(js.includes("BetterTrack_preview"), false);
+  assert.ok(js.includes("BetterTrack_AthleteGroups"));
 
   const assets = [...js.matchAll(/\/app\/assets\/[^"'\\\s)]+/g)].map((match) => match[0]);
   assert.ok(assets.length >= 26, `expected asset references, found ${assets.length}`);
